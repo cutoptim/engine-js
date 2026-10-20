@@ -1,0 +1,32 @@
+# CI for the mirror repo cutoptim/engine-js (published from the CutOptim monorepo, sdks/typescript).
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - name: Webhook signature vector
+        run: |
+          node --input-type=module -e "
+            import { readFileSync } from 'node:fs';
+            import { verifyWebhook } from './dist/index.js';
+            const v = JSON.parse(readFileSync('tests/webhook-vector.json', 'utf8'));
+            const good = await verifyWebhook(v.body, v.header, v.secret, { nowS: v.t });
+            const bad = await verifyWebhook(v.body + ' ', v.header, v.secret, { nowS: v.t });
+            if (!good || bad) { console.error('vector failed', { good, bad }); process.exit(1); }
+            console.log('webhook vector ok');
+          "

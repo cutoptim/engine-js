@@ -1,0 +1,29 @@
+# Publish @cutoptim/engine to npm on a version tag (v1.2.3), from the mirror repo cutoptim/engine-js.
+# npm trusted publishing (OIDC, no token anywhere) + provenance. The `release` environment holds the approval gate.
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: npm with trusted publishing (>= 11.5.1)
+        run: npm install -g npm@^11.5.1
+      - name: The tag must equal package.json version
+        run: |
+          test "v$(node -p "require('./package.json').version")" = "${GITHUB_REF_NAME}" || { echo "tag ${GITHUB_REF_NAME} != package.json"; exit 1; }
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - run: npm publish --provenance --access public

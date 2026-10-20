@@ -1,0 +1,52 @@
+{
+  "name": "@cutoptim/engine",
+  "version": "1.0.0",
+  "description": "Official client for the CutOptim Engine API — cutting optimization (2D panels, 1D linear, timber, true-shape nesting) over HTTPS.",
+  "license": "MIT",
+  "author": "CutOptim <support@cutoptim.com>",
+  "homepage": "https://cutoptim.com/engine/reference",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cutoptim/engine-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cutoptim/engine-js/issues"
+  },
+  "keywords": [
+    "cutoptim",
+    "cutting optimization",
+    "cut list",
+    "nesting",
+    "panel saw",
+    "api client"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
