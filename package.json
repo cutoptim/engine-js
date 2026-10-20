@@ -1,6 +1,6 @@
 {
   "name": "@cutoptim/engine",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Official client for the CutOptim Engine API — cutting optimization (2D panels, 1D linear, timber, true-shape nesting) over HTTPS.",
   "license": "MIT",
   "author": "CutOptim <support@cutoptim.com>",
